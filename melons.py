@@ -2,20 +2,18 @@
 
 
 class AbstractMelonOrder:
-    # order_type = None
-    # tax = None
+    order_type = None
+    tax = None
 
     def __init__(self, species, qty):
         """Initialize melon order attributes."""
 
         self.species = species
         self.qty = qty
-        # can this be an attribute up top? Or does it need to be here in init?
         self.shipped = False
 
     def __repr__(self):
-        return f'<species={self.species} qty={self.qty} shipped={self.shipped}>'
-        # do we need to add order_type and tax to the repr? Does the repr go here or in the subclasses?
+        return f'<species={self.species} qty={self.qty} shipped={self.shipped} order_type={self.order_type} tax={self.tax}>'
 
     def get_total(self):
         """Calculate price, including tax."""
