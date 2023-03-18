@@ -63,4 +63,13 @@ class InternationalMelonOrder(AbstractMelonOrder):
         return self.country_code
 
 
-# class GovernmentMelonOrder()
+class GovernmentMelonOrder(AbstractMelonOrder):
+    order_type = 'government'
+    tax = 0
+    passed_inspection = False
+
+    def __repr__(self):
+        return super().__repr__()[:-1] + f' passed_inspection={self.passed_inspection}>'
+
+    def mark_inspection(self, passed):
+        self.passed_inspection = passed
