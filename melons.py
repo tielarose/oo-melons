@@ -13,7 +13,7 @@ class AbstractMelonOrder:
         self.shipped = False
 
     def __repr__(self):
-        return f'<species={self.species} qty={self.qty} shipped={self.shipped} order_type={self.order_type} tax={self.tax}>'
+        return f"<species={self.species} qty={self.qty} shipped={self.shipped} order_type={self.order_type} tax={self.tax}>"
 
     def get_total(self):
         """Calculate price, including tax."""
@@ -50,7 +50,17 @@ class InternationalMelonOrder(AbstractMelonOrder):
     order_type = "international"
     tax = 0.17
 
+    def __init__(self, species, qty, country_code):
+        super().__init__(species, qty)
+        self.country_code = country_code
+
+    def __repr__(self):
+        return super().__repr__()[:-1] + f' country_code={self.country_code}>'
+
     def get_country_code(self):
         """Return the country code."""
 
         return self.country_code
+
+
+# class GovernmentMelonOrder()
