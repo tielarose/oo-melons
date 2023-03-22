@@ -1,4 +1,5 @@
 """Classes for melon orders."""
+from random import choice
 
 
 class AbstractMelonOrder:
@@ -15,6 +16,10 @@ class AbstractMelonOrder:
     def __repr__(self):
         return f"<species={self.species} qty={self.qty} shipped={self.shipped} order_type={self.order_type} tax={self.tax}>"
 
+    @staticmethod
+    def get_base_price():
+        return choice(range(5, 10))
+
     def get_total(self):
         """Calculate price, including tax."""
 
@@ -23,7 +28,7 @@ class AbstractMelonOrder:
         else:
             price_multiplier = 1
 
-        base_price = 5
+        base_price = self.get_base_price()
         total = (1 + self.tax) * self.qty * base_price * price_multiplier
 
         if self.order_type == "international" and self.qty < 10:
