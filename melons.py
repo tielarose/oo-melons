@@ -14,6 +14,14 @@ class AbstractMelonOrder:
         self.qty = qty
         self.shipped = False
 
+        try:
+            if self.qty > 100:
+                raise TooManyMelonsError
+            else:
+                print("Acceptable number of melons")
+        except ValueError:
+            raise TooManyMelonsError("too many melons")
+
     def __repr__(self):
         return f"<species={self.species} qty={self.qty} shipped={self.shipped} order_type={self.order_type} tax={self.tax}>"
 
@@ -88,3 +96,8 @@ class GovernmentMelonOrder(AbstractMelonOrder):
 
     def mark_inspection(self, passed):
         self.passed_inspection = passed
+
+
+class TooManyMelonsError(ValueError):
+    "Raised when the number of melons is over 100"
+    pass
