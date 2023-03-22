@@ -3,6 +3,10 @@ from random import choice
 from datetime import datetime
 
 
+class TooManyMelonsError(ValueError):
+    """Raised when the number of melons is over 100"""
+
+
 class AbstractMelonOrder:
     order_type = None
     tax = None
@@ -10,17 +14,12 @@ class AbstractMelonOrder:
     def __init__(self, species, qty):
         """Initialize melon order attributes."""
 
+        if qty > 100:
+            raise TooManyMelonsError("No more than 100 melons!!")
+
         self.species = species
         self.qty = qty
         self.shipped = False
-
-        try:
-            if self.qty > 100:
-                raise TooManyMelonsError
-            else:
-                print("Acceptable number of melons")
-        except ValueError:
-            raise TooManyMelonsError("too many melons")
 
     def __repr__(self):
         return f"<species={self.species} qty={self.qty} shipped={self.shipped} order_type={self.order_type} tax={self.tax}>"
@@ -43,14 +42,15 @@ class AbstractMelonOrder:
         else:
             price_multiplier = 1
 
-        base_price = self.get_base_price()
-        total = (1 + self.tax) * self.qty * base_price * price_multiplier
-
-        if self.order_type == "international" and self.qty < 10:
+        total = (1 + self.tax) * self.qty * \
+            self.get_base_price() * price_multiplier
+        if self.order_type == InternationalMelonOrder.order_type and self.qty < 10:
             total += 3
 
         return total
 
+    # look up setter in Python classes
+    # shipped could be a a setter instead
     def mark_shipped(self):
         """Record the fact than an order has been shipped."""
 
@@ -75,7 +75,7 @@ class InternationalMelonOrder(AbstractMelonOrder):
         self.country_code = country_code
 
     def __repr__(self):
-        return super().__repr__()[:-1] + f' country_code={self.country_code}>'
+        return f'{super().__repr__()[:-1]} country_code={self.country_code}>'
 
     def get_country_code(self):
         """Return the country code."""
@@ -92,12 +92,7 @@ class GovernmentMelonOrder(AbstractMelonOrder):
         self.passed_inspection = False
 
     def __repr__(self):
-        return super().__repr__()[:-1] + f' passed_inspection={self.passed_inspection}>'
+        return f'{super().__repr__()[:-1]} passed_inspection={self.passed_inspection}>'
 
     def mark_inspection(self, passed):
         self.passed_inspection = passed
-
-
-class TooManyMelonsError(ValueError):
-    "Raised when the number of melons is over 100"
-    pass
