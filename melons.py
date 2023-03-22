@@ -1,5 +1,6 @@
 """Classes for melon orders."""
 from random import choice
+from datetime import datetime
 
 
 class AbstractMelonOrder:
@@ -18,7 +19,13 @@ class AbstractMelonOrder:
 
     @staticmethod
     def get_base_price():
-        return choice(range(5, 10))
+        base_price = choice(range(5, 10))
+
+        # rush hour pricing 8-11 Mon-Fri
+        if (8 <= datetime.now().hour <= 11) and (datetime.now().weekday() <= 4):
+            base_price += 4
+
+        return base_price
 
     def get_total(self):
         """Calculate price, including tax."""
